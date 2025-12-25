@@ -1,78 +1,80 @@
-<<<<<<< HEAD
-# React + TypeScript + Vite
+# 🧭 Job Tracker – React Kanban Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, lightweight **job application tracking** app built with **React + TypeScript**.  
+It helps you manage your job search using a **Kanban-style board**, with full CRUD support, filtering, and persistent storage.
 
-Currently, two official plugins are available:
+> Built as a hands-on React practice project to demonstrate real-world state management, UI patterns, and TypeScript usage.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+- 🗂️ **Kanban Board**
+  - Wishlist / Applied / Interview / Offer / Rejected columns
+- ➕ **Add Application**
+  - Modal-based form with controlled inputs
+- ✏️ **Edit Application**
+  - Reuse the same modal for editing existing entries
+- 🗑️ **Delete Application**
+- 🔄 **Move Between Columns**
+  - Change status via dropdown, card moves instantly
+- 🔍 **Search & Filter**
+  - Search by company or role
+  - Filter by application status
+- 💾 **Persistent Storage**
+  - Data is saved to `localStorage`
+- 🎨 **Modern UI**
+  - Custom styled selects, modal, clean layout
+- 🔐 **Type-safe**
+  - Strongly typed with TypeScript
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🖼️ Screenshots
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Board View
+![Kanban Board](src/assets/job-tracker-img.png)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Add / Edit Modal
+![Add Application](src/assets/job-tracker-img-2.png)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Search & Filter
+![Search Filter](src/assets/job-tracker-img-3.png)
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🛠️ Tech Stack
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-=======
-# Job-Tracker
-Job Tracker web app
->>>>>>> 3ca26d49a1ff98bc5386c0c70035d97a59c54c22
+- **React**
+- **TypeScript**
+- **Vite**
+- **Tailwind CSS**
+- **LocalStorage API**
+
+---
+
+## 🧠 What This Project Demonstrates
+
+This project was built to practice and demonstrate:
+
+- React component architecture
+- `useState`, `useEffect` and immutable state updates
+- Controlled forms and modal patterns
+- Reusable logic for **Add / Edit / Delete**
+- Array operations (`map`, `filter`) for UI rendering
+- TypeScript union types and strict typing
+- Clean UI/UX without external component libraries
+
+---
+
+## 🚀 Getting Started
+
+```bash
+# clone the repository
+git clone https://github.com/MehmetHooke/job-tracker.git
+
+# install dependencies
+npm install
+
+# start development server
+npm run dev
