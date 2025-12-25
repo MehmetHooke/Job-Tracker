@@ -72,113 +72,141 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(app));
   }, [app]);
+
+
+
+
   return (
     <>
-      <div className="min-h-screen text-white pt-20  bg-[#27292c] pb-50" >
+      <div className="min-h-screen text-white pt-20 bg-[#27292c] pb-20 sm:pb-24">
         <Header />
 
-        <div className='mt-8  mb-5 flex justify-center'>
-          <input
-            placeholder='Seacrh...'
+        {/* Top bar: search + filter */}
+        <div className="mt-8 mb-5 px-4">
+          <div className="mx-auto flex w-full max-w-3xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-center">
+            <input
+              placeholder="Search..."
+              className="
+            w-full sm:w-[320px]
+            rounded-2xl pl-4 py-2
+            shadow-md ring-1 ring-amber-50
+            focus:outline-none focus:ring-2 focus:ring-blue-500
+          "
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
 
-            className='rounded-2xl pl-4  mr-2 shadow-md ring-1 ring-amber-50        focus:outline-none
-      focus:ring-2 focus:ring-blue-500'
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)} />
-          <div className="relative inline-block">
-
-            <select
-              className='shadow-md rounded-xl     
-                        appearance-none
-                        bg-[#27292c]
-                        border border-gray-300
-                        px-4 py-2 pr-10
-                        text-sm
-                        focus:outline-none
-                        focus:ring-2 focus:ring-[#27292c]
-                        focus:border-blue-500
-                        hover:border-gray-400
-                        transition'
-              name="search"
-              id="seacrh"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value as Status | "ALL")}
-            >
-
-              <option value="ALL">ALL</option>
-              {columns.map((c) => (
-                <option key={c.status} value={c.status}>
-                  {c.title}
-                </option>
-              ))}
-
-            </select>
-            <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-              <svg
-                className="h-4 w-4 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            <div className="relative w-full sm:w-auto">
+              <select
+                className="
+              w-full
+              shadow-md rounded-xl
+              appearance-none
+              bg-[#27292c]
+              text-white
+              border border-gray-300
+              px-4 py-2 pr-10
+              text-sm
+              focus:outline-none
+              focus:ring-2 focus:ring-[#27292c]
+              focus:border-blue-500
+              hover:border-gray-400
+              transition
+            "
+                name="search"
+                id="search"
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value as Status | 'ALL')}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
+                <option value="ALL">ALL</option>
+                {columns.map((c) => (
+                  <option key={c.status} value={c.status}>
+                    {c.title}
+                  </option>
+                ))}
+              </select>
+
+              <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
+                <svg
+                  className="h-4 w-4 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </div>
             </div>
           </div>
-
         </div>
-        {isOpen ?
+
+        {/* Add / Edit area */}
+        {isOpen ? (
           <>
-            <div className='text-center'>
+            <div className="text-center px-4">
               <button
                 onClick={toggleAddApplication}
-                className='pl-4 pr-4 pt-2 pb-2  text-white bg-blue-500 shadow-lg shadow-blue-500/50 rounded-md mt-10 '>Close x</button>
+                className="w-full sm:w-auto px-4 py-2 text-white bg-blue-500 shadow-lg shadow-blue-500/50 rounded-md mt-6"
+                type="button"
+              >
+                Close ×
+              </button>
             </div>
-            <div className='flex justify-center   m-10'>
 
+            <div className="flex justify-center px-4 mt-6">
               <form
-
-                className="flex flex-col p-8 rounded-2xl shadow-lg shadow-amber-50/15 max-w-87 gap-2"
+                className="
+              w-[92vw] max-w-md
+              flex flex-col gap-2
+              p-6 sm:p-8
+              rounded-2xl
+              shadow-lg shadow-amber-50/15
+            "
                 onSubmit={(e) => {
                   e.preventDefault();
-                  console.log("submitted");
 
                   if (draft.company.trim() !== "" && draft.role.trim() !== "") {
                     if (editingID === null) {
-
-
                       const newItem = {
                         id: crypto.randomUUID(),
                         company: draft.company,
                         role: draft.role,
                         status: draft.status,
-                        dateApplied: new Date().toISOString()
+                        dateApplied: new Date().toISOString(),
+                      };
 
-
-
-                      }
-                      console.log(" if submitted");
-                      setApp((prev) => [newItem, ...prev])
-                      setDraft({ company: "", role: "", status: "APPLIED" })
-                      setIsOpen(false)
+                      setApp((prev) => [newItem, ...prev]);
+                    } else {
+                      setApp((prev) =>
+                        prev.map((a) =>
+                          a.id === editingID
+                            ? {
+                              ...a,
+                              company: draft.company,
+                              role: draft.role,
+                              status: draft.status,
+                            }
+                            : a
+                        )
+                      );
                     }
-                    else {
-                      setApp(prev => prev.map((a) => (a.id === editingID ? { ...a, company: draft.company, role: draft.role, status: draft.status } : a)))
 
-                    }
-                    setEditingID(null)
-                    setIsOpen(false)
-                    setDraft({ company: "", role: "", status: "APPLIED" })
+                    setEditingID(null);
+                    setIsOpen(false);
+                    setDraft({ company: "", role: "", status: "APPLIED" });
                   }
-                }
-                }
+                }}
               >
-                <label className='mb-5'>{editingID ? "Edit Application" : "Add Application"}</label>
+                <label className="mb-3 text-lg font-semibold">
+                  {editingID ? "Edit Application" : "Add Application"}
+                </label>
+
                 <label>Company</label>
                 <input
                   type="text"
@@ -186,8 +214,13 @@ export default function App() {
                   onChange={(e) =>
                     setDraft((prev) => ({ ...prev, company: e.target.value }))
                   }
-                  className=" rounded-lg pl-2  px-3 py-1  mr-2 shadow-md ring-1 ring-amber-50        focus:outline-none
-      focus:ring-2 focus:ring-blue-500"
+                  className="
+                w-full
+                rounded-lg px-3 py-2
+                shadow-md ring-1 ring-amber-50
+                focus:outline-none focus:ring-2 focus:ring-blue-500
+                text-white bg-[#1f2023]
+              "
                 />
 
                 <label>Role</label>
@@ -197,97 +230,151 @@ export default function App() {
                   onChange={(e) =>
                     setDraft((prev) => ({ ...prev, role: e.target.value }))
                   }
-                  className=" rounded-lg pl-2 px-3 py-1   mr-2 shadow-md ring-1 ring-amber-50        focus:outline-none
-      focus:ring-2 focus:ring-blue-500 "
+                  className="
+                w-full
+                rounded-lg px-3 py-2
+                shadow-md ring-1 ring-amber-50
+                focus:outline-none focus:ring-2 focus:ring-blue-500
+                text-white bg-[#1f2023]
+              "
                 />
 
                 <label>Status</label>
-                <select
-                  value={draft.status}
-                  onChange={(e) =>
-                    setDraft((prev) => ({ ...prev, status: e.target.value as Status }))
-                  }
-                  className="  
-                  shadow-md rounded-xl     
-                        appearance-none
-                        bg-[#27292c]
-                        border border-gray-300
-                        px-4 py-2 pr-10
-                        text-sm
-                        focus:outline-none
-                        focus:ring-2 focus:ring-blue-500
-                        focus:border-blue-500
-                        hover:border-gray-400
-                        transition
-                  "
-                >
-                  {columns.map((c) => (
-                    <option key={c.status} value={c.status}>
-                      {c.title}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative">
+                  <select
+                    value={draft.status}
+                    onChange={(e) =>
+                      setDraft((prev) => ({
+                        ...prev,
+                        status: e.target.value as Status,
+                      }))
+                    }
+                    className="
+                  w-full
+                  shadow-md rounded-xl
+                  appearance-none
+                  bg-[#27292c]
+                  text-white
+                  border border-gray-300
+                  px-4 py-2 pr-10
+                  text-sm
+                  focus:outline-none
+                  focus:ring-2 focus:ring-blue-500
+                  hover:border-gray-400
+                  transition
+                "
+                  >
+                    {columns.map((c) => (
+                      <option key={c.status} value={c.status}>
+                        {c.title}
+                      </option>
+                    ))}
+                  </select>
+
+                  <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
+                    <svg
+                      className="h-4 w-4 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M19 9l-7 7-7-7"
+                      />
+                    </svg>
+                  </div>
+                </div>
 
                 <button
-                  className="text-white rounded-sm bg-blue-500 shadow-lg shadow-blue-500/50  py-2 text-lg font-bold  mt-2"
+                  className="w-full text-white rounded-xl bg-blue-500 shadow-lg shadow-blue-500/50 py-2 text-lg font-bold mt-2"
                   type="submit"
                 >
-                  Submit
+                  {editingID ? "Update" : "Submit"}
                 </button>
               </form>
-
             </div>
           </>
-          :
-          <div className='text-center'>
+        ) : (
+          <div className="text-center px-4">
             <button
               onClick={toggleAddApplication}
-              className='pl-4 pr-4 pt-2 pb-2 text-white  bg-blue-500 shadow-lg shadow-blue-500/50 rounded-md mt-10 mb-10'>Add Application +</button>
-          </div>}
+              className="w-full sm:w-auto px-4 py-2 text-white bg-blue-500 shadow-lg shadow-blue-500/50 rounded-md mt-6 mb-6"
+              type="button"
+            >
+              Add Application +
+            </button>
+          </div>
+        )}
 
 
-        <div className="flex gap-6 justify-center">
+        <div className="overflow-x-auto px-4 pb-6 snap-x snap-mandatory">
+          <div className="flex gap-4 w-max mx-auto">
+            {columns.map((col) => {
+              const filteredApps = visibleApps.filter((app) => app.status === col.status);
 
-          {columns.map(
-            (col) => {
-              const filteredApps = visibleApps.filter(
-                (app) => app.status === col.status
-              ); return (
-                <div key={col.status} className="min-w-55 shadow-lg shadow-amber-50/15 mt-5 border border-[#3a3a3a18] rounded-xl p-3">
-                  <h3 className='font-bold'>{col.title} ({filteredApps.length})</h3>
-                  <div className="mt-5 bg ">
-                    <div>
-                      {
-                        filteredApps.length === 0 && <div>No Applications...</div>
-                      }
-                    </div>
+              return (
+                <div
+                  key={col.status}
+                  className=" 
+          snap-start
+          w-[85vw] sm:w-[320px] lg:w-85
+          shrink-0
+          shadow-lg shadow-amber-50/15
+          mt-15
+          border border-[#3a3a3a18]
+          rounded-xl
+          p-3
+        "
+                >
+                  <h3 className="font-bold">
+                    {col.title} ({filteredApps.length})
+                  </h3>
 
+                  <div className="mt-5">
+                    {filteredApps.length === 0 && (
+                      <div className="mt-6 text-center text-sm opacity-70">
+                        No applications in this column.
+                      </div>
+                    )}
 
                     {filteredApps.map((app) => (
-                      <div key={app.id} className='border shadow-lg   border-[#aeaeb422] rounded-lg p-2 mt-3'>
+                      <div
+                        key={app.id}
+                        className="border shadow-lg border-[#aeaeb422] rounded-lg p-2 mt-3"
+                      >
                         <div className="font-semibold">{app.company}</div>
                         <div className="text-sm opacity-50">{app.role}</div>
-                        <div className="text-sm">{new Date(app.dateApplied).toLocaleDateString()}</div>
+                        <div className="text-sm">
+                          {new Date(app.dateApplied).toLocaleDateString()}
+                        </div>
 
-
-                        <div className="relative mt-2 ">
+                        <div className="relative mt-2">
                           <select
                             name="status"
                             value={app.status}
                             onChange={(e) => {
                               const newStatus = e.target.value as Status;
                               setApp((prev) =>
-                                prev.map((a) => (a.id === app.id ? { ...a, status: newStatus } : a))
+                                prev.map((a) =>
+                                  a.id === app.id ? { ...a, status: newStatus } : a
+                                )
                               );
                             }}
                             className="
-                            w-full  appearance-none
-                            bg-[#27292c]  text-white
-                            border border-gray-300  shadow-md  rounded-xl  px-4 py-2 pr-10
-                            text-sm leading-6
-                            focus:outline-none focus:ring-2 focus:ring-blue-500
-                            focus:border-blue-500 hover:border-gray-400 transition
-                          "
+                    w-full appearance-none
+                    bg-[#27292c] text-white
+                    border border-gray-300 shadow-md
+                    rounded-xl
+                    px-4 py-2 pr-10
+                    text-sm leading-6
+                    focus:outline-none focus:ring-2 focus:ring-blue-500
+                    focus:border-blue-500
+                    hover:border-gray-400
+                    transition
+                  "
                           >
                             {columns.map((c) => (
                               <option key={c.status} value={c.status}>
@@ -303,26 +390,40 @@ export default function App() {
                               stroke="currentColor"
                               viewBox="0 0 24 24"
                             >
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M19 9l-7 7-7-7"
+                              />
                             </svg>
                           </div>
                         </div>
 
+                        <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:justify-center sm:gap-3">
+                          <button
+                            type="button"
+                            onClick={() => handleEditClick(app)}
+                            className="w-full sm:w-auto px-4 py-2 text-white bg-blue-500 shadow-lg shadow-blue-500/50 rounded-md"
+                          >
+                            Edit
+                          </button>
 
-                        <div className='flex justify-center'>
-
-                          <button onClick={() => (handleEditClick(app))} className=' flex  pl-4 pr-4 pt-2 pb-2 text-white  bg-blue-500 shadow-lg shadow-blue-500/50 rounded-md mt-3 mb-1 mr-3'>Edit</button>
-
-                          <button onClick={() => (handleDelete(app.id))} className=' flex  pl-4 pr-4 pt-2 pb-2 text-white  bg-red-500 shadow-lg shadow-red-500/50 rounded-md mt-3 mb-1'>Delete</button>
+                          <button
+                            type="button"
+                            onClick={() => handleDelete(app.id)}
+                            className="w-full sm:w-auto px-4 py-2 text-white bg-red-500 shadow-lg shadow-red-500/50 rounded-md"
+                          >
+                            Delete
+                          </button>
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
-              )
-            }
-          )}
-
+              );
+            })}
+          </div>
         </div>
       </div>
     </>
