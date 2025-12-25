@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { mockApplications } from './data/mockApplications';
 import type { Application, Status } from "./types/application";
 import Header from './Header';
+import Footer from './Footer';
 
 
 const STORAGE_KEY = "job-tracker-apps";
@@ -78,7 +79,7 @@ export default function App() {
 
   return (
     <>
-      <div className="min-h-screen text-white pt-20 bg-[#27292c] pb-20 sm:pb-24">
+      <div className="min-h-screen text-white pt-20 bg-[#27292c] sm:pb-24">
         <Header />
 
         {/* Top bar: search + filter */}
@@ -426,6 +427,7 @@ export default function App() {
           </div>
         </div>
       </div>
+        <Footer/>
     </>
   )
 }
